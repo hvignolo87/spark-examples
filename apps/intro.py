@@ -1,3 +1,5 @@
+from os import getenv
+
 from pyspark import SparkConf, SparkContext
 
 conf = SparkConf()
@@ -7,7 +9,9 @@ conf.set("spark.driver.port", "7077")
 conf.set("spark.driver.host", "localhost")
 conf.set("spark.driver.bindAddress", "localhost")
 
-sc = SparkContext(sparkHome="${SPARK_HOME}", conf=conf).getOrCreate()
+SPARK_HOME = getenv("SPARK_HOME", "opt/spark")
+
+sc = SparkContext(sparkHome=SPARK_HOME, conf=conf).getOrCreate()
 sc.setLogLevel("ERROR")
 
 print(sc.version)
@@ -17,7 +21,7 @@ print(sc.sparkHome)
 print(sc.sparkUser())
 print(sc.defaultParallelism)
 
-rdd = sc.parallelize([("a",7),("a",2),("b",2)])
+rdd = sc.parallelize([("a", 7), ("a", 2), ("b", 2)])
 
 print(rdd.collect())
 print(rdd.getNumPartitions())
